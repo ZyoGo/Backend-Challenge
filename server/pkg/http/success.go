@@ -5,7 +5,7 @@ import "net/http"
 func NewSuccessCreatedResponse() DefaultResponse {
 	return DefaultResponse{
 		Code:    http.StatusCreated,
-		Status:  "Success",
+		Status:  "SUCCESS",
 		Message: "Success Created Data",
 	}
 }
@@ -13,6 +13,6 @@ func NewSuccessCreatedResponse() DefaultResponse {
 func NewSuccessDefaultResponse() DefaultResponse {
 	return DefaultResponse{
 		Code:   http.StatusOK,
-		Status: "Success",
+		Status: "SUCCESS",
 	}
 }

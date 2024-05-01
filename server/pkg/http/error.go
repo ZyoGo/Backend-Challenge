@@ -21,7 +21,7 @@ const (
 type DefaultResponse struct {
 	Code    int    `json:"code"`
 	Status  string `json:"status"`
-	Message string `json:"message"`
+	Message string `json:"message,omitempty"`
 }
 
 type ErrorResponse struct {
