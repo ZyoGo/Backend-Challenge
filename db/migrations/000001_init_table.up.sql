@@ -25,6 +25,7 @@ CREATE TABLE
         "id" varchar(26) PRIMARY KEY NOT NULL,
         "cart_id" varchar(26) NOT NULL,
         "product_id" varchar(26) NOT NULL,
+        "quantity" integer NOT NULL,
         "created_at" timestamp NOT NULL DEFAULT (now ()),
         "updated_at" timestamp NOT NULL DEFAULT (now ()),
         "deleted_at" timestamp
