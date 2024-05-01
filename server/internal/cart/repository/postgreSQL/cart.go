@@ -21,7 +21,7 @@ func NewPostgreSQL(db *pgxpool.Pool) *PostgreSQL {
 }
 
 func (repo *PostgreSQL) CheckCartByUserID(ctx context.Context, userID string) (exist bool, id string, err error) {
-	query := `SELECT id FROM carts WHERE user_id = $1`
+	query := `SELECT id FROM carts WHERE user_id = $1 AND deleted_at IS NULL`
 
 	err = repo.db.QueryRow(ctx, query, userID).Scan(&id)
 	if err != nil {
@@ -49,7 +49,7 @@ func (repo *PostgreSQL) CreateCart(ctx context.Context, userID string, newID str
 func (repo *PostgreSQL) InsertOrUpdateCartItem(ctx context.Context, params core.AddCartItemParams) error {
 	// Check existing row and get quantity
 	var existQuantity int
-	err := repo.db.QueryRow(ctx, `SELECT quantity FROM cart_items WHERE cart_id = $1 AND product_id = $2`, params.CartID, params.ProductID).Scan(&existQuantity)
+	err := repo.db.QueryRow(ctx, `SELECT quantity FROM cart_items WHERE cart_id = $1 AND product_id = $2 AND deleted_at IS NULL`, params.CartID, params.ProductID).Scan(&existQuantity)
 	if err != nil && err != pgx.ErrNoRows {
 		return derrors.WrapErrorf(err, derrors.ErrorCodeUnknown, PostgreErrMsg)
 	}
@@ -65,7 +65,7 @@ func (repo *PostgreSQL) InsertOrUpdateCartItem(ctx context.Context, params core.
 
 	// Update quantity for row
 	newQuantity := existQuantity + params.Quantity
-	_, err = repo.db.Exec(ctx, `UPDATE cart_items SET quantity = $1, updated_at = now() WHERE cart_id = $2 AND product_id = $3`, newQuantity, params.CartID, params.ProductID)
+	_, err = repo.db.Exec(ctx, `UPDATE cart_items SET quantity = $1, updated_at = now() WHERE cart_id = $2 AND product_id = $3 AND deleted_at IS NULL`, newQuantity, params.CartID, params.ProductID)
 	return err
 }
 
@@ -89,7 +89,7 @@ func (repo *PostgreSQL) FindCartItems(ctx context.Context, userID string) (core.
 			  JOIN
 					products p ON ci.product_id = p.id
 			  WHERE
-					c.user_id = $1;`
+					c.user_id = $1 AND ci.deleted_at IS NULL`
 
 	rows, err := repo.db.Query(ctx, query, userID)
 	if err != nil {
