@@ -11,7 +11,7 @@ import (
 	"github.com/ZyoGo/Backend-Challange/cmd/modules"
 	"github.com/ZyoGo/Backend-Challange/config"
 	"github.com/ZyoGo/Backend-Challange/pkg/db"
-	"github.com/ZyoGo/Backend-Challange/pkg/http/logger"
+	"github.com/ZyoGo/Backend-Challange/pkg/http/middleware/logger"
 	"github.com/ZyoGo/Backend-Challange/pkg/response"
 	"github.com/gorilla/mux"
 )
