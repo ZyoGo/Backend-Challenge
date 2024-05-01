@@ -55,8 +55,11 @@ func (repo *PostgreSQL) InsertOrUpdateCartItem(ctx context.Context, params core.
 	// If no rows, insert new data
 	if err == pgx.ErrNoRows {
 		_, err = repo.db.Exec(ctx, `INSERT INTO cart_items(id, cart_id, product_id, quantity, created_at, updated_at)
-            VALUES($1, $2, $3, $4, now(), now())`, params.CartItemID, params.CartID, params.ProductID, params.Quantity)
-		return derrors.WrapErrorf(err, derrors.ErrorCodeUnknown, PostgreErrMsg)
+		VALUES($1, $2, $3, $4, now(), now())`, params.CartItemID, params.CartID, params.ProductID, params.Quantity)
+		if err != nil {
+			return derrors.WrapErrorf(err, derrors.ErrorCodeUnknown, PostgreErrMsg)
+		}
+		return nil
 	}
 
 	// Update quantity for row
