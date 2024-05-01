@@ -6,6 +6,7 @@ import (
 	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
 	"github.com/ZyoGo/Backend-Challange/pkg/derrors"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -68,6 +69,70 @@ func (repo *PostgreSQL) InsertOrUpdateCartItem(ctx context.Context, params core.
 	return err
 }
 
-func (repo *PostgreSQL) FindCartItems(ctx context.Context, cartID string) (core.Cart, error) {
-	return core.Cart{}, nil
+func (repo *PostgreSQL) FindCartItems(ctx context.Context, userID string) (core.Cart, error) {
+	var (
+		carts         core.Cart
+		cartID        string
+		cartCreatedAt pgtype.Timestamp
+		cartUpdatedAt pgtype.Timestamp
+	)
+	tempCartItems := make(map[string][]core.CartItem)
+
+	query := `SELECT
+					c.id as cart_id, c.user_id, c.created_at as cart_created_at, c.updated_at as cart_updated_at,
+					ci.id as item_id, ci.product_id, ci.quantity, ci.created_at as item_created_at, ci.updated_at as item_updated_at,
+					p.name as product_name, p.price as product_price
+			  FROM
+					carts c
+			  JOIN
+					cart_items ci ON c.id = ci.cart_id
+			  JOIN
+					products p ON ci.product_id = p.id
+			  WHERE
+					c.user_id = $1;`
+
+	rows, err := repo.db.Query(ctx, query, userID)
+	if err != nil {
+		return core.Cart{}, derrors.WrapErrorf(err, derrors.ErrorCodeUnknown, PostgreErrMsg)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			itemID        string
+			productID     string
+			quantity      int
+			itemCreatedAt pgtype.Timestamp
+			itemUpdatedAt pgtype.Timestamp
+			productName   string
+			productPrice  float64
+		)
+
+		err := rows.Scan(&cartID, &userID, &cartCreatedAt, &cartUpdatedAt, &itemID, &productID, &quantity, &itemCreatedAt, &itemUpdatedAt, &productName, &productPrice)
+		if err != nil {
+			return core.Cart{}, derrors.WrapErrorf(err, derrors.ErrorCodeUnknown, PostgreErrMsg)
+		}
+
+		if _, ok := tempCartItems[cartID]; !ok {
+			tempCartItems[cartID] = []core.CartItem{}
+		}
+
+		item := CartItem{
+			ID:           itemID,
+			ProductID:    productID,
+			ProductName:  productName,
+			ProductPrice: productPrice,
+			Quantity:     quantity,
+			CreatedAt:    itemCreatedAt,
+			UpdatedAt:    itemUpdatedAt,
+		}
+		tempCartItems[cartID] = append(tempCartItems[cartID], item.ToCore())
+	}
+
+	carts.ID = cartID
+	carts.UserID = userID
+	carts.CartItem = tempCartItems[cartID]
+	carts.CreatedAt = cartCreatedAt.Time
+	carts.UpdatedAt = cartUpdatedAt.Time
+	return carts, nil
 }

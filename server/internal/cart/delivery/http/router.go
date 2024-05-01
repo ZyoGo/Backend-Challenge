@@ -13,4 +13,5 @@ func RegisterPath(r *mux.Router, h *Handler, authGuard *authguard.AuthGuard) {
 	}
 
 	r.HandleFunc("/v1/products/cart", h.AddCartItem).Methods("POST").Handler(authGuard.Guard(http.HandlerFunc(h.AddCartItem)))
+	r.HandleFunc("/v1/carts", h.GetCartByUserID).Methods("GET").Handler(authGuard.Guard(http.HandlerFunc(h.GetCartByUserID)))
 }

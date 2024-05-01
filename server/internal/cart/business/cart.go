@@ -37,6 +37,20 @@ func (b *CartBusiness) AddCartItem(ctx context.Context, dto core.AddCartItemPara
 	return b.repo.InsertOrUpdateCartItem(ctx, insertCartItemParams)
 }
 
-func (b *CartBusiness) GetCartItems(ctx context.Context, cartID string) (core.Cart, error) {
-	return core.Cart{}, nil
+func (b *CartBusiness) GetCartItems(ctx context.Context, userID string) (core.Cart, error) {
+	carts, err := b.repo.FindCartItems(ctx, userID)
+	if err != nil {
+		return carts, err
+	}
+
+	for i := range carts.CartItem {
+		item := &carts.CartItem[i]
+		item.Amount = b.SumAmount(item.Quantity, item.ProductPrice)
+	}
+
+	return carts, nil
+}
+
+func (b *CartBusiness) SumAmount(quantity int, price float64) float64 {
+	return float64(quantity) * price
 }

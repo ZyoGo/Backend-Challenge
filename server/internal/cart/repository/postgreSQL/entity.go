@@ -1,6 +1,7 @@
 package postgresql
 
 import (
+	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -22,4 +23,17 @@ type Cart struct {
 	CartItems []CartItem
 	CreatedAt pgtype.Timestamp
 	UpdatedAt pgtype.Timestamp
+}
+
+func (row *CartItem) ToCore() core.CartItem {
+	return core.CartItem{
+		ID:           row.ID,
+		CartID:       row.CartID,
+		ProductID:    row.ProductID,
+		ProductName:  row.ProductName,
+		ProductPrice: row.ProductPrice,
+		Quantity:     row.Quantity,
+		CreatedAt:    row.CreatedAt.Time,
+		UpdatedAt:    row.UpdatedAt.Time,
+	}
 }
