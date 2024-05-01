@@ -2,7 +2,7 @@
 name = "Mooi-Studio-Backend"
 port = 4001
 corsOrigin = "[*]"
-logLevel = "info"
+logLevel = "debug"
 
 [database]
 name = "db_mooi_studio"
