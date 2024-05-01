@@ -1,0 +1,23 @@
+[app]
+name = "Mooi-Studio-Backend"
+port = 4001
+corsOrigin = "[*]"
+logLevel = "info"
+
+[database]
+name = "db_mooi_studio"
+host = "postgres"
+port = 5432
+user = "user"
+password = "password123"
+timeZone = "Etc/UTC"
+maxConns = 200
+minConns = 1
+maxConnLife = 1
+maxConnLifeUnit = "hour"
+maxConnIdle = 1
+maxConnIdleUnit = "minute"
+healthCheckPeriod = 5
+healthCheckPeriodUnit = "second"
+connConnectTimeout = 5
+connConnectTimeoutUnit = "second"
