@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ZyoGo/Backend-Challange/pkg/derrors"
-	"github.com/ZyoGo/Backend-Challange/pkg/http/logger"
+	"github.com/ZyoGo/Backend-Challange/pkg/http/middleware/logger"
 	"go.uber.org/zap"
 )
 
@@ -44,6 +44,14 @@ func NewValidationResponse(errMsg string) DefaultResponse {
 		Code:    400,
 		Status:  ErrValidation,
 		Message: errMsg,
+	}
+}
+
+func NewUnauthorizedResponse(msg string) DefaultResponse {
+	return DefaultResponse{
+		Code:    http.StatusUnauthorized,
+		Status:  ErrUnauthorized,
+		Message: msg,
 	}
 }
 
