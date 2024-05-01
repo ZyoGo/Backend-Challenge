@@ -85,7 +85,7 @@ func (j *jwtBusiness) ParseAndVerifyJWT(jwtToken string) (AuthGuardJWT, error) {
 	if ok && token.Valid {
 		return AuthGuardJWT{
 			Email:  claims.Email,
-			UserId: claims.ID,
+			UserId: claims.UserId,
 		}, nil
 	}
 
