@@ -58,6 +58,7 @@ CREATE TABLE
         "id" varchar(26) PRIMARY KEY NOT NULL,
         "user_id" varchar(26) NOT NULL,
         "payment_status" varchar(30),
+        "amount" numeric(10, 2) NOT NULL,
         "created_at" timestamp NOT NULL DEFAULT (now ()),
         "updated_at" timestamp NOT NULL DEFAULT (now ()),
         "deleted_at" timestamp
