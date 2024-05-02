@@ -71,3 +71,9 @@ curl --location 'localhost:4001/health'
 ## Design Database (ERD)
 
 ![Database Design](docs/img/design_db.png)
+
+## Use Postman Collection
+
+we can use postman collection at [here](docs/postman%20collection/).
+
+download at import as collection and environment
