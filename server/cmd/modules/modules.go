@@ -3,9 +3,12 @@ package modules
 import (
 	authBusi "github.com/ZyoGo/Backend-Challange/internal/auth/business"
 	authApiHttp "github.com/ZyoGo/Backend-Challange/internal/auth/delivery/http"
-	cartBusi "github.com/ZyoGo/Backend-Challange/internal/cart/business"
-	cartApiHttp "github.com/ZyoGo/Backend-Challange/internal/cart/delivery/http"
-	cartRepo "github.com/ZyoGo/Backend-Challange/internal/cart/repository/postgreSQL"
+	cartBusi "github.com/ZyoGo/Backend-Challange/internal/carts/business"
+	cartApiHttp "github.com/ZyoGo/Backend-Challange/internal/carts/delivery/http"
+	cartRepo "github.com/ZyoGo/Backend-Challange/internal/carts/repository/postgreSQL"
+	orderBusi "github.com/ZyoGo/Backend-Challange/internal/orders/business"
+	orderApiHttp "github.com/ZyoGo/Backend-Challange/internal/orders/delivery/http"
+	orderRepo "github.com/ZyoGo/Backend-Challange/internal/orders/repository/postgreSQL"
 	productBusi "github.com/ZyoGo/Backend-Challange/internal/products/business"
 	productApiHttp "github.com/ZyoGo/Backend-Challange/internal/products/delivery/http"
 	productRepo "github.com/ZyoGo/Backend-Challange/internal/products/repository/postgreSQL"
@@ -45,7 +48,13 @@ func RegisterModules(r *mux.Router, db *pgxpool.Pool) {
 	cartBusiness := cartBusi.NewBusiness(cartRepository, genUlidID)
 	cartHandler := cartApiHttp.NewHandler(cartBusiness)
 
+	// Orders modules
+	orderRepository := orderRepo.NewPostgreSQL(db)
+	orderBusiness := orderBusi.NewBusiness(orderRepository, genUlidID)
+	orderHandler := orderApiHttp.NewHandler(orderBusiness)
+
 	authApiHttp.RegisterPath(r, authHandler)
 	productApiHttp.RegisterPath(r, productHandler)
 	cartApiHttp.RegisterPath(r, cartHandler, authGuard)
+	orderApiHttp.RegisterPath(r, orderHandler, authGuard)
 }
