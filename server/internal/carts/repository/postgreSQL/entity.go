@@ -1,7 +1,7 @@
 package postgresql
 
 import (
-	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/core"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 

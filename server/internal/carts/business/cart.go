@@ -3,7 +3,7 @@ package business
 import (
 	"context"
 
-	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/core"
 )
 
 type CartBusiness struct {

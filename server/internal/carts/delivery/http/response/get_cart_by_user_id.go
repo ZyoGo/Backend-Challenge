@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/core"
 )
 
 type cartItemResp struct {

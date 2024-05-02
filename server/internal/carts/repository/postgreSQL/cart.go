@@ -3,7 +3,7 @@ package postgresql
 import (
 	"context"
 
-	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/core"
 	"github.com/ZyoGo/Backend-Challange/pkg/derrors"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"

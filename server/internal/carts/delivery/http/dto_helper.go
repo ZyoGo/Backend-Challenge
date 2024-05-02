@@ -1,8 +1,8 @@
 package http
 
 import (
-	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
-	"github.com/ZyoGo/Backend-Challange/internal/cart/delivery/http/request"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/core"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/delivery/http/request"
 )
 
 func NewAddCartItemDTO(req *request.AddCartItemRequest) core.AddCartItemParams {

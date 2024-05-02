@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/ZyoGo/Backend-Challange/internal/cart/core"
-	"github.com/ZyoGo/Backend-Challange/internal/cart/delivery/http/request"
-	"github.com/ZyoGo/Backend-Challange/internal/cart/delivery/http/response"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/core"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/delivery/http/request"
+	"github.com/ZyoGo/Backend-Challange/internal/carts/delivery/http/response"
 	"github.com/gorilla/mux"
 
 	common "github.com/ZyoGo/Backend-Challange/pkg/http"
