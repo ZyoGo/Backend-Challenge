@@ -70,4 +70,4 @@ curl --location 'localhost:4001/health'
 
 ## Design Database (ERD)
 
-![Database Design](img/design_db.png)
+![Database Design](docs/img/design_db.png)
