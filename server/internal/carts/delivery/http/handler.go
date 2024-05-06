@@ -79,11 +79,26 @@ func (h *Handler) GetCartByUserID(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) DeleteCartItemByID(w http.ResponseWriter, r *http.Request) {
 	req := new(request.DeleteCartItemReq)
 	ctx := r.Context()
-
 	params := mux.Vars(r)
-	req.CartItemID = params["id"]
 
-	if err := h.business.DeleteCartItemByID(ctx, req.CartItemID); err != nil {
+	req.CartItemID = params["cartId"]
+	req.UserID = params["userId"]
+
+	user, ok := ctx.Value("userAttr").(jwt.AuthGuardJWT)
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(common.NewUnauthorizedResponse("Invalid / expired token"))
+		return
+	}
+
+	if user.UserId != req.UserID {
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(common.NewForbiddenResponse())
+		return
+	}
+
+	dto := NewDeleteCartItemDTO(req)
+	if err := h.business.DeleteCartItemByID(ctx, dto); err != nil {
 		resp := common.MapErrorToResponse(err)
 		w.WriteHeader(resp.Code)
 		json.NewEncoder(w).Encode(resp)

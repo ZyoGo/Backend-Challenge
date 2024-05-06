@@ -7,3 +7,8 @@ type AddCartItemParams struct {
 	ProductID  string
 	Quantity   int
 }
+
+type DeleteCartItemParams struct {
+	UserID     string
+	CartItemID string
+}

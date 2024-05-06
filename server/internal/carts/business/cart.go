@@ -51,8 +51,8 @@ func (b *CartBusiness) GetCartItems(ctx context.Context, userID string) (core.Ca
 	return carts, nil
 }
 
-func (b *CartBusiness) DeleteCartItemByID(ctx context.Context, cartItemId string) error {
-	return b.repo.DeleteCartItemByID(ctx, cartItemId)
+func (b *CartBusiness) DeleteCartItemByID(ctx context.Context, dto core.DeleteCartItemParams) error {
+	return b.repo.DeleteCartItemByID(ctx, dto)
 }
 
 func (b *CartBusiness) SumAmount(quantity int, price float64) float64 {

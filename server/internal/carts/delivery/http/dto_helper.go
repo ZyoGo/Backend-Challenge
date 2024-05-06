@@ -12,3 +12,10 @@ func NewAddCartItemDTO(req *request.AddCartItemRequest) core.AddCartItemParams {
 		Quantity:  req.Quantity,
 	}
 }
+
+func NewDeleteCartItemDTO(req *request.DeleteCartItemReq) core.DeleteCartItemParams {
+	return core.DeleteCartItemParams{
+		UserID:     req.UserID,
+		CartItemID: req.CartItemID,
+	}
+}

@@ -137,10 +137,10 @@ func (repo *PostgreSQL) FindCartItems(ctx context.Context, userID string) (core.
 	return carts, nil
 }
 
-func (repo *PostgreSQL) DeleteCartItemByID(ctx context.Context, cartItemID string) error {
-	query := `UPDATE cart_items SET deleted_at = now() WHERE id = $1`
+func (repo *PostgreSQL) DeleteCartItemByID(ctx context.Context, params core.DeleteCartItemParams) error {
+	query := `UPDATE cart_items SET deleted_at = now() WHERE id = $1 AND user_id = $2`
 
-	_, err := repo.db.Exec(ctx, query, cartItemID)
+	_, err := repo.db.Exec(ctx, query, params.CartItemID, params.UserID)
 	if err != nil {
 		return derrors.WrapErrorf(err, derrors.ErrorCodeUnknown, PostgreErrMsg)
 	}
