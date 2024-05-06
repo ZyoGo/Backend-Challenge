@@ -2,7 +2,6 @@ package business
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
 	"github.com/ZyoGo/Backend-Challange/internal/orders/core"
@@ -41,7 +40,6 @@ func (b *OrderBusiness) CreateOrder(ctx context.Context, dto core.CreateOrderDTO
 
 	quantityProduct := b.getQuantityProduct(dto.OrderItems)
 	if err := b.checkStockOrderItem(products, quantityProduct); err != nil {
-		fmt.Println("masuk sini 1 = ", err)
 		return err
 	}
 
@@ -49,30 +47,25 @@ func (b *OrderBusiness) CreateOrder(ctx context.Context, dto core.CreateOrderDTO
 	newOrder := b.newOrderHelper(dto, orderID, amountPrice)
 
 	if err := b.repo.CreateOrder(ctx, tx, newOrder); err != nil {
-		fmt.Println("masuk sini 2 = ", err)
 		return err
 	}
 
 	newOrderItem := b.newOrderItemHelper(dto, products, orderID, quantityProduct)
 	if err := b.repo.CreateOrderItem(ctx, tx, newOrderItem); err != nil {
-		fmt.Println("masuk sini 3 = ", err)
 		return err
 	}
 
 	if err := b.repo.CreatePaymentVA(ctx, orderID); err != nil {
-		fmt.Println("masuk sini 4 = ", err)
 		return err
 	}
 
 	if dto.IsCarts {
 		if err := b.repo.DeleteCartItems(ctx, tx, dto.CartItemID); err != nil {
-			fmt.Println("masuk sini 5 = ", err)
 			return err
 		}
 	}
 
 	if err := b.repo.DecreaseStockProduct(ctx, tx, quantityProduct); err != nil {
-		fmt.Println("masuk sini 6 = ", err)
 		return err
 	}
 
