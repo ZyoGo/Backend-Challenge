@@ -12,5 +12,5 @@ func RegisterPath(r *mux.Router, h *Handler, authGuard *authguard.AuthGuard) {
 		panic("Auth controller cannot be nil")
 	}
 
-	r.HandleFunc("/v1/orders", h.CreateOrder).Methods("POST").Handler(authGuard.Guard(http.HandlerFunc(h.CreateOrder)))
+	r.HandleFunc("/v1/users/{userId}/orders", h.CreateOrder).Methods("POST").Handler(authGuard.Guard(http.HandlerFunc(h.CreateOrder)))
 }
