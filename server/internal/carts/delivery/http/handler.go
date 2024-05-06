@@ -24,13 +24,8 @@ func NewHandler(business core.Business) *Handler {
 func (h *Handler) AddCartItem(w http.ResponseWriter, r *http.Request) {
 	request := new(request.AddCartItemRequest)
 	ctx := r.Context()
-	user, ok := ctx.Value("userAttr").(jwt.AuthGuardJWT)
-	if !ok {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(common.NewUnauthorizedResponse("Invalid / expired token"))
-		return
-	}
-	request.UserID = user.UserId
+	params := mux.Vars(r)
+	request.UserID = params["userId"]
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
