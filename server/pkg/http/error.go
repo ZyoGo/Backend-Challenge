@@ -16,6 +16,7 @@ const (
 	ErrInternalServer = "SERVER_ERROR"
 	ErrNotFound       = "NOT_FOUND"
 	ErrUnauthorized   = "UNAUTHORIZED"
+	ErrForbidden      = "FORBIDDEN"
 )
 
 type DefaultResponse struct {
@@ -52,6 +53,14 @@ func NewUnauthorizedResponse(msg string) DefaultResponse {
 		Code:    http.StatusUnauthorized,
 		Status:  ErrUnauthorized,
 		Message: msg,
+	}
+}
+
+func NewForbiddenResponse() DefaultResponse {
+	return DefaultResponse{
+		Code:    http.StatusForbidden,
+		Status:  ErrForbidden,
+		Message: "Forbidden",
 	}
 }
 
