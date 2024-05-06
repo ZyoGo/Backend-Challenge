@@ -6,6 +6,7 @@ import (
 
 	"github.com/ZyoGo/Backend-Challange/internal/orders/core"
 	"github.com/ZyoGo/Backend-Challange/internal/orders/delivery/http/request"
+	"github.com/gorilla/mux"
 
 	common "github.com/ZyoGo/Backend-Challange/pkg/http"
 	jwt "github.com/ZyoGo/Backend-Challange/pkg/jwt"
@@ -22,6 +23,8 @@ func NewHandler(business core.Business) *Handler {
 func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	request := new(request.CreateOrderRequest)
+	params := mux.Vars(r)
+	request.UserID = params["userId"]
 
 	user, ok := ctx.Value("userAttr").(jwt.AuthGuardJWT)
 	if !ok {
@@ -29,7 +32,11 @@ func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(common.NewUnauthorizedResponse("Invalid / expired token"))
 		return
 	}
-	request.UserID = user.UserId
+
+	if user.UserId != request.UserID {
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(common.NewForbiddenResponse())
+	}
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
