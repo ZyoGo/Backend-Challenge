@@ -47,13 +47,21 @@ func (h *Handler) AddCartItem(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetCartByUserID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	params := mux.Vars(r)
+	userID := params["userId"]
+
 	user, ok := ctx.Value("userAttr").(jwt.AuthGuardJWT)
 	if !ok {
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(common.NewUnauthorizedResponse("Invalid / expired token"))
 		return
 	}
-	userID := user.UserId
+
+	if user.UserId != userID {
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(common.NewForbiddenResponse())
+		return
+	}
 
 	carts, err := h.business.GetCartItems(ctx, userID)
 	if err != nil {
